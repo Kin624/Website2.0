@@ -13,10 +13,10 @@
       min-height: 100vh;
     }
 
-    /* ===== TOP PROFILE SECTION ===== */
+    /* ===== PROFILE SECTION ===== */
     .profile-section {
       text-align: center;
-      padding: 40px 16px 0;
+      padding: 30px 16px 0;
     }
     .profile-wrap { position: relative; display: inline-block; margin-bottom: 20px; }
     .profile-glow {
@@ -107,7 +107,7 @@
     }
 
     /* ===== BNS LIVE STOCK SECTION ===== */
-    .bns-section { max-width: 550px; margin: 0 auto; padding: 0 16px; }
+    .bns-section { max-width: 550px; margin: 0 auto; padding: 15px 16px 0; }
 
     .bns-header { text-align: center; padding: 25px 15px 15px; }
     .bns-header h2 {
@@ -142,7 +142,6 @@
       height: 70vh;
       overflow-y: auto;
       padding: 14px 12px;
-      scroll-behavior: smooth;
     }
     .feed::-webkit-scrollbar { width: 8px; }
     .feed::-webkit-scrollbar-track { background: #0d0d14; }
@@ -300,37 +299,20 @@ const CONFIG = {
     channel: "KenzBNS",
     knownPost: 56,
     maxShown: 20,
-    pollEvery: 30000
+    pollEvery: 30000,
+
+    // 🔄 AUTO-SCROLL SETTINGS
+    autoScrollSpeed: 120,     // ← pixels per SECOND (higher = faster, try 150 or 200)
+    resumeAfter: 2000,        // ← ms to wait after touch before resuming (2000 = 2 seconds)
+    loopPause: 1000           // ← ms pause at bottom before looping back to top
   }
 };
 </script>
 
 <!-- ✏️ EDIT ABOVE — DON'T CHANGE BELOW (design code) -->
 
-<!-- ===== PROFILE SECTION ===== -->
-<div class="profile-section">
-  <div class="profile-wrap fade-up">
-    <div class="profile-glow"></div>
-    <img class="profile-img" id="photo" alt="Profile" />
-  </div>
-  <h1 class="name gradient-text fade-up d1" id="name"></h1>
-  <p class="tagline fade-up d1" id="tagline"></p>
-  <div class="socials fade-up d2" id="socials"></div>
-
-  <div class="divider fade-up d2">
-    <div class="divider-line"></div>
-    <div class="divider-label">Games</div>
-    <div class="divider-line"></div>
-  </div>
-
-  <div class="game-list fade-up d3" id="games"></div>
-</div>
-
-<!-- ===== DIVIDER ===== -->
-<hr class="big-divider fade-up d4" />
-
-<!-- ===== BNS LIVE STOCK SECTION ===== -->
-<div class="bns-section fade-up d4">
+<!-- ===== BNS LIVE STOCK SECTION (TOP) ===== -->
+<div class="bns-section fade-up">
   <div class="bns-header">
     <h2 id="bnsTitle"></h2>
     <p><span class="live-dot"></span><span id="bnsSubtitle"></span></p>
@@ -345,6 +327,28 @@ const CONFIG = {
       </div>
     </div>
   </div>
+</div>
+
+<!-- ===== DIVIDER ===== -->
+<hr class="big-divider fade-up d2" />
+
+<!-- ===== PROFILE SECTION ===== -->
+<div class="profile-section fade-up d3">
+  <div class="profile-wrap">
+    <div class="profile-glow"></div>
+    <img class="profile-img" id="photo" alt="Profile" />
+  </div>
+  <h1 class="name gradient-text" id="name"></h1>
+  <p class="tagline" id="tagline"></p>
+  <div class="socials" id="socials"></div>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-label">Games</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="game-list" id="games"></div>
 </div>
 
 <!-- ===== FOOTER ===== -->
@@ -500,7 +504,7 @@ setInterval(() => {
       discard(wrap, num);
     }
   });
-}, 700);
+}, 300);
 
 // Live poller
 setInterval(() => {
@@ -508,6 +512,90 @@ setInterval(() => {
     addWidget(i);
   }
 }, POLL_EVERY);
+
+// ============================================================
+// AUTO-SCROLL: smooth time-based scrolling, loops to top,
+// pauses when user touches/hovers, resumes after they stop
+// ============================================================
+
+const SCROLL_SPEED  = bns.autoScrollSpeed || 120;  // px per second
+const RESUME_AFTER  = bns.resumeAfter || 2000;
+const LOOP_PAUSE    = bns.loopPause || 1000;
+
+let userActive = false;
+let resumeTimer = null;
+let loopWaiting = false;
+let scrollPos = 0;
+let lastTime = null;
+
+function pauseAutoScroll() {
+  userActive = true;
+  clearTimeout(resumeTimer);
+}
+
+function scheduleResume() {
+  clearTimeout(resumeTimer);
+  resumeTimer = setTimeout(() => {
+    scrollPos = feed.scrollTop;   // continue from where the user left off
+    lastTime = null;              // reset timing so there's no jump
+    userActive = false;
+  }, RESUME_AFTER);
+}
+
+// --- Touch (mobile) ---
+feed.addEventListener('touchstart', pauseAutoScroll, { passive: true });
+feed.addEventListener('touchmove', pauseAutoScroll, { passive: true });
+feed.addEventListener('touchend', scheduleResume, { passive: true });
+
+// --- Mouse (desktop) ---
+feed.addEventListener('mouseenter', pauseAutoScroll);
+feed.addEventListener('mouseleave', scheduleResume);
+feed.addEventListener('wheel', () => { pauseAutoScroll(); scheduleResume(); }, { passive: true });
+feed.addEventListener('mousedown', pauseAutoScroll);
+feed.addEventListener('mouseup', scheduleResume);
+
+// --- Smooth time-based scroll loop (frame-rate independent) ---
+function autoScrollTick(timestamp) {
+  if (userActive || loopWaiting) {
+    lastTime = null;                      // don't accumulate time while paused
+    requestAnimationFrame(autoScrollTick);
+    return;
+  }
+
+  if (lastTime === null) lastTime = timestamp;
+  const delta = (timestamp - lastTime) / 1000;   // seconds since last frame
+  lastTime = timestamp;
+
+  const maxScroll = feed.scrollHeight - feed.clientHeight;
+
+  if (maxScroll > 10) {
+    scrollPos += SCROLL_SPEED * delta;    // move exactly SPEED px per second
+
+    if (scrollPos >= maxScroll) {
+      feed.scrollTop = maxScroll;
+      loopWaiting = true;
+      setTimeout(() => {
+        feed.scrollTop = 0;               // instant jump back to top
+        scrollPos = 0;
+        lastTime = null;
+        loopWaiting = false;
+      }, LOOP_PAUSE);
+    } else {
+      feed.scrollTop = scrollPos;
+    }
+  }
+
+  requestAnimationFrame(autoScrollTick);
+}
+
+// start as soon as the first post appears (checks every 500ms)
+const startWatcher = setInterval(() => {
+  if (feed.querySelector('.post-wrap.found')) {
+    clearInterval(startWatcher);
+    scrollPos = feed.scrollTop;
+    requestAnimationFrame(autoScrollTick);
+  }
+}, 500);
 </script>
 </body>
 </html>
