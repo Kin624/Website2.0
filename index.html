@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kinzi Dev • Links & Live Stock</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #0a0a0f;
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    /* ===== TOP PROFILE SECTION ===== */
+    .profile-section {
+      text-align: center;
+      padding: 40px 16px 0;
+    }
+    .profile-wrap { position: relative; display: inline-block; margin-bottom: 20px; }
+    .profile-glow {
+      position: absolute; inset: -10px; border-radius: 50%;
+      background: linear-gradient(135deg, #00ffe1, #0078ff);
+      filter: blur(30px); opacity: 0.25;
+      animation: glowPulse 3s ease-in-out infinite;
+    }
+    .profile-img {
+      position: relative; width: 130px; height: 130px;
+      border-radius: 50%; border: 4px solid rgba(255,255,255,0.9);
+      object-fit: cover;
+      animation: float 4s ease-in-out infinite;
+    }
+    .name { font-size: 26px; font-weight: 700; margin-bottom: 4px; }
+    .gradient-text {
+      background: linear-gradient(135deg, #00ffe1, #0078ff);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .tagline { color: #666; font-size: 14px; margin-bottom: 20px; }
+
+    /* Social icons */
+    .socials { display: flex; justify-content: center; gap: 12px; margin-bottom: 28px; }
+    .social-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: rgba(17,17,17,0.7); border: 1px solid rgba(0,255,225,0.08);
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.25s; text-decoration: none;
+    }
+    .social-icon:hover {
+      border-color: rgba(0,255,225,0.4); transform: scale(1.1);
+      box-shadow: 0 0 20px rgba(0,255,225,0.2);
+    }
+    .social-icon img { width: 22px; height: 22px; filter: brightness(0) invert(1); }
+
+    /* Divider */
+    .divider {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 22px;
+      max-width: 460px; margin-left: auto; margin-right: auto;
+    }
+    .divider-line { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, rgba(0,255,225,0.25), transparent); }
+    .divider-label { font-size: 11px; color: #555; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; }
+
+    /* Game dropdowns */
+    .game-list {
+      display: flex; flex-direction: column; gap: 14px;
+      max-width: 460px; margin: 0 auto;
+    }
+    .game-btn {
+      display: flex; align-items: center; gap: 12px; width: 100%;
+      background: linear-gradient(135deg, #00ffe1, #0078ff);
+      color: #000; padding: 14px 20px; border-radius: 14px;
+      font-weight: 700; font-size: 15px; border: none; cursor: pointer;
+      box-shadow: 0 0 20px rgba(0,255,225,0.3);
+      transition: all 0.2s;
+    }
+    .game-btn:hover { transform: scale(1.02); box-shadow: 0 0 30px rgba(0,255,225,0.5); }
+    .game-btn:active { transform: scale(0.98); }
+    .game-btn img {
+      width: 32px; height: 32px; border-radius: 6px;
+      object-fit: cover; border: 1px solid rgba(0,0,0,0.15);
+    }
+    .game-btn .arrow { margin-left: auto; font-size: 12px; transition: transform 0.2s; }
+    .game-btn .arrow.open { transform: rotate(180deg); }
+
+    .game-dropdown {
+      display: none; margin-top: -6px; padding: 8px;
+      background: rgba(17,17,17,0.85); backdrop-filter: blur(12px);
+      border: 1px solid rgba(0,255,225,0.12); border-radius: 12px;
+    }
+    .game-dropdown.show { display: block; }
+    .game-dropdown a {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 14px; border-radius: 8px;
+      color: #fff; text-decoration: none; font-weight: 600; font-size: 14px;
+      transition: background 0.2s;
+    }
+    .game-dropdown a:hover { background: rgba(0,255,225,0.1); }
+    .game-dropdown a::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: #00ffe1; opacity: 0.5;
+    }
+
+    /* ===== SECTION DIVIDER ===== */
+    .big-divider {
+      max-width: 550px; margin: 40px auto 0;
+      border: none; border-top: 1px solid #1a2a3a;
+    }
+
+    /* ===== BNS LIVE STOCK SECTION ===== */
+    .bns-section { max-width: 550px; margin: 0 auto; padding: 0 16px; }
+
+    .bns-header { text-align: center; padding: 25px 15px 15px; }
+    .bns-header h2 {
+      color: #00d4ff;
+      text-shadow: 0 0 20px rgba(0,212,255,.5);
+      font-size: 22px;
+    }
+    .bns-header p { color: #888; margin-top: 4px; font-size: 14px; }
+    .btn-row { margin-top: 12px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-block;
+      background: linear-gradient(90deg,#00d4ff,#0088cc);
+      color: #000; font-weight: bold;
+      padding: 9px 22px; border-radius: 8px;
+      text-decoration: none;
+      box-shadow: 0 0 15px rgba(0,212,255,.35);
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+    .btn:hover { box-shadow: 0 0 25px rgba(0,212,255,.55); transform: scale(1.03); }
+    .btn.alt { background: #14141f; color: #00d4ff; border: 1px solid #00d4ff44; box-shadow: none; }
+    .btn.alt:hover { box-shadow: 0 0 15px rgba(0,212,255,.2); }
+
+    .feed-box {
+      border: 1px solid #1a2a3a;
+      border-radius: 14px;
+      box-shadow: 0 0 30px rgba(0,212,255,.12);
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+    .feed {
+      height: 70vh;
+      overflow-y: auto;
+      padding: 14px 12px;
+      scroll-behavior: smooth;
+    }
+    .feed::-webkit-scrollbar { width: 8px; }
+    .feed::-webkit-scrollbar-track { background: #0d0d14; }
+    .feed::-webkit-scrollbar-thumb {
+      background: linear-gradient(#00d4ff, #0088cc);
+      border-radius: 10px;
+    }
+
+    .post-wrap {
+      margin-bottom: 16px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(0,212,255,.1);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+    .post-wrap.found { opacity: 1; transform: translateY(0); }
+    .post-wrap.removing {
+      opacity: 0;
+      transform: translateX(-40px);
+    }
+    .post-wrap.pending {
+      position: absolute;
+      left: -9999px;
+      width: 500px;
+      opacity: 1;
+      transform: none;
+    }
+
+    .loader { text-align: center; padding: 30px 0; color: #00d4ff; }
+    .loader .ring {
+      width: 36px; height: 36px;
+      border: 3px solid #00d4ff33;
+      border-top-color: #00d4ff;
+      border-radius: 50%;
+      margin: 0 auto 10px;
+      animation: spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .live-dot {
+      display: inline-block;
+      width: 8px; height: 8px;
+      background: #2ecc71;
+      border-radius: 50%;
+      margin-right: 6px;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .3; } }
+
+    /* Footer */
+    .footer {
+      text-align: center; color: #444; font-size: 12px;
+      padding: 25px 16px 30px;
+      border-top: 1px solid #111;
+      margin-top: 30px;
+    }
+    .footer-brand {
+      display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 6px;
+    }
+    .footer-icon {
+      width: 22px; height: 22px; border-radius: 6px;
+      background: linear-gradient(135deg, #00ffe1, #0078ff);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 900; color: #000;
+    }
+
+    /* Animations */
+    @keyframes glowPulse { 0%,100% { box-shadow: 0 0 20px rgba(0,255,225,0.3); } 50% { box-shadow: 0 0 40px rgba(0,255,225,0.6); } }
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .fade-up { animation: fadeUp 0.5s ease-out forwards; opacity: 0; }
+    .d1 { animation-delay: 0.1s; }
+    .d2 { animation-delay: 0.2s; }
+    .d3 { animation-delay: 0.3s; }
+    .d4 { animation-delay: 0.4s; }
+  </style>
+</head>
+<body>
+
+<!-- ╔══════════════════════════════════════════════════════╗
+     ║  ✏️  EDIT YOUR CONTENT HERE  — JUST CHANGE TEXT!    ║
+     ╚══════════════════════════════════════════════════════╝ -->
+
+<script>
+const CONFIG = {
+
+  // 👤 YOUR PROFILE
+  name: "Kinzi Dev",
+  tagline: "Game Scripts & Accounts",
+  photo: "https://github.com/Kin624/KinzPanel/blob/main/photo_2025-06-18_19-31-34.jpg?raw=true",
+
+  // 🔗 SOCIAL ICONS
+  socials: [
+    {
+      name: "Telegram",
+      url: "https://t.me/kinzicpmchannel",
+      icon: "https://cdn-icons-png.flaticon.com/512/174/174855.png"
+    },
+    {
+      name: "YouTube",
+      url: "https://youtube.com/@szdeath01?si=A3PVzpK9KiTyZbsi",
+      icon: "https://site-unifecaf.vercel.app/_next/static/media/youtube.3f452be5.png"
+    },
+    // ➕ Add more: { name: "Instagram", url: "https://instagram.com/you", icon: "https://cdn-icons-png.flaticon.com/512/174/174855.png" },
+  ],
+
+  // 🎮 GAME BUTTONS
+  games: [
+    {
+      icon: "https://cdn.nichesites.pikoya.com/apps4blast_com/images/games/54615/hive_600x600.jpg",
+      title: "Car Parking Multiplayer",
+      links: [
+        { label: "Accounts", url: "https://t.me/kinzicpmchannel" },
+        { label: "Script", url: "#" }
+      ]
+    },
+    {
+      icon: "https://play-lh.googleusercontent.com/1DhZDejbhLxExB4o4WyhtcIrpO5s4BaWqbk3nsjl64TM9nwO3iCQqpV18ZO3PyklnA",
+      title: "Car Parking Multiplayer 2",
+      links: [
+        { label: "Script", url: "https://pay.risepay.com.br/Pay/d37ae5b3a08946daa4204aac2333bb73" }
+      ]
+    },
+    {
+      icon: "https://m.media-amazon.com/images/I/612HrNi7o8L.png",
+      title: "Real Racing 3",
+      links: [
+        { label: "Accounts", url: "#" }
+      ]
+    },
+    // ➕ Add more games here
+  ],
+
+  // 📺 BNS LIVE STOCK FEED CONFIG
+  bns: {
+    title: "⚔️ BNS ADM/MM2/BBALL",
+    subtitle: "Roblox Buy & Sell — Live Stock Feed",
+    channelBtn: { label: "📲 Join Channel", url: "https://t.me/KenzBNS" },
+    contactBtn: { label: "💬 Contact @finral48388", url: "https://t.me/finral48388" },
+    channel: "KenzBNS",
+    knownPost: 56,
+    maxShown: 20,
+    pollEvery: 30000
+  }
+};
+</script>
+
+<!-- ✏️ EDIT ABOVE — DON'T CHANGE BELOW (design code) -->
+
+<!-- ===== PROFILE SECTION ===== -->
+<div class="profile-section">
+  <div class="profile-wrap fade-up">
+    <div class="profile-glow"></div>
+    <img class="profile-img" id="photo" alt="Profile" />
+  </div>
+  <h1 class="name gradient-text fade-up d1" id="name"></h1>
+  <p class="tagline fade-up d1" id="tagline"></p>
+  <div class="socials fade-up d2" id="socials"></div>
+
+  <div class="divider fade-up d2">
+    <div class="divider-line"></div>
+    <div class="divider-label">Games</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <div class="game-list fade-up d3" id="games"></div>
+</div>
+
+<!-- ===== DIVIDER ===== -->
+<hr class="big-divider fade-up d4" />
+
+<!-- ===== BNS LIVE STOCK SECTION ===== -->
+<div class="bns-section fade-up d4">
+  <div class="bns-header">
+    <h2 id="bnsTitle"></h2>
+    <p><span class="live-dot"></span><span id="bnsSubtitle"></span></p>
+    <div class="btn-row" id="bnsButtons"></div>
+  </div>
+
+  <div class="feed-box">
+    <div class="feed" id="feed">
+      <div class="loader" id="loader">
+        <div class="ring"></div>
+        Loading live stock...
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<div class="footer">
+  <div class="footer-brand">
+    <div class="footer-icon">K</div>
+    <span class="gradient-text" style="font-size:13px;font-weight:700;">Kinzi Dev</span>
+  </div>
+  <div>Posts update live from Telegram · GCASH & Binance accepted</div>
+</div>
+
+<script>
+// ============================================================
+// RENDER: Profile, Socials, Games
+// ============================================================
+
+// Profile
+document.getElementById('photo').src = CONFIG.photo;
+document.getElementById('name').textContent = CONFIG.name;
+document.getElementById('tagline').textContent = CONFIG.tagline;
+
+// Socials
+let shtml = '';
+CONFIG.socials.forEach(s => {
+  shtml += `<a href="${s.url}" target="_blank" rel="noopener" class="social-icon" title="${s.name}">
+    <img src="${s.icon}" alt="${s.name}" />
+  </a>`;
+});
+document.getElementById('socials').innerHTML = shtml;
+
+// Games
+let ghtml = '';
+CONFIG.games.forEach((g, i) => {
+  let links = '';
+  g.links.forEach(l => {
+    links += `<a href="${l.url}" target="_blank" rel="noopener">${l.label}</a>`;
+  });
+  ghtml += `
+    <div>
+      <button class="game-btn" onclick="toggleGame(${i})">
+        <img src="${g.icon}" alt="${g.title}" />
+        ${g.title}
+        <span class="arrow" id="arrow-${i}">▼</span>
+      </button>
+      <div class="game-dropdown" id="dd-${i}">${links}</div>
+    </div>`;
+});
+document.getElementById('games').innerHTML = ghtml;
+
+function toggleGame(i) {
+  const dd = document.getElementById('dd-' + i);
+  const arrow = document.getElementById('arrow-' + i);
+  const isOpen = dd.classList.contains('show');
+  document.querySelectorAll('.game-dropdown').forEach(d => d.classList.remove('show'));
+  document.querySelectorAll('.arrow').forEach(a => a.classList.remove('open'));
+  if (!isOpen) { dd.classList.add('show'); arrow.classList.add('open'); }
+}
+
+// ============================================================
+// RENDER: BNS Live Stock Feed
+// ============================================================
+
+const bns = CONFIG.bns;
+document.getElementById('bnsTitle').textContent = bns.title;
+document.getElementById('bnsSubtitle').textContent = bns.subtitle;
+document.getElementById('bnsButtons').innerHTML = `
+  <a class="btn" href="${bns.channelBtn.url}" target="_blank">${bns.channelBtn.label}</a>
+  <a class="btn alt" href="${bns.contactBtn.url}" target="_blank">${bns.contactBtn.label}</a>
+`;
+
+// --- Telegram feed logic ---
+const CHANNEL     = bns.channel;
+const KNOWN_POST  = bns.knownPost;
+const MAX_SHOWN   = bns.maxShown;
+const SCAN_AHEAD  = 10;
+const NOT_FOUND_H = 90;
+const POLL_EVERY  = bns.pollEvery;
+const WIDGET_TIMEOUT = 15000;
+
+const feed   = document.getElementById('feed');
+const loader = document.getElementById('loader');
+
+const found = new Set();
+const tried = new Map();
+let maxFound = parseInt(localStorage.getItem('kenz_maxPost')) || KNOWN_POST;
+
+function addWidget(num) {
+  if (num < 1 || found.has(num) || tried.has(num)) return;
+  const wrap = document.createElement('div');
+  wrap.className = 'post-wrap pending';
+  wrap.dataset.post = num;
+  wrap.dataset.created = Date.now();
+  const s = document.createElement('script');
+  s.async = true;
+  s.src = "https://telegram.org/js/telegram-widget.js?22";
+  s.setAttribute("data-telegram-post", CHANNEL + "/" + num);
+  s.setAttribute("data-width", "100%");
+  s.setAttribute("data-dark", "1");
+  wrap.appendChild(s);
+  feed.appendChild(wrap);
+  tried.set(num, wrap);
+}
+
+function reveal(wrap, num) {
+  wrap.classList.remove('pending');
+  loader.style.display = 'none';
+  found.add(num);
+  tried.delete(num);
+  if (num > maxFound) {
+    maxFound = num;
+    localStorage.setItem('kenz_maxPost', num);
+    addWidget(num + 1);
+  }
+  const shown = [...feed.querySelectorAll('.post-wrap.found')];
+  const before = shown.find(w => parseInt(w.dataset.post) < num);
+  feed.insertBefore(wrap, before || null);
+  requestAnimationFrame(() => wrap.classList.add('found'));
+  trimQueue();
+}
+
+function trimQueue() {
+  while (found.size > MAX_SHOWN) {
+    const oldest = Math.min(...found);
+    found.delete(oldest);
+    const w = feed.querySelector('.post-wrap.found[data-post="' + oldest + '"]');
+    if (w) {
+      w.classList.add('removing');
+      setTimeout(() => w.remove(), 600);
+    }
+  }
+}
+
+function discard(wrap, num) {
+  wrap.remove();
+  tried.delete(num);
+}
+
+// Initial load
+for (let i = maxFound + SCAN_AHEAD; i >= Math.max(1, maxFound - (MAX_SHOWN + 10)); i--) {
+  addWidget(i);
+}
+
+// Detection loop
+setInterval(() => {
+  const now = Date.now();
+  tried.forEach((wrap, num) => {
+    const iframe = wrap.querySelector('iframe');
+    const styleH = iframe ? parseInt(iframe.style.height) : NaN;
+    if (!isNaN(styleH)) {
+      if (styleH >= NOT_FOUND_H) reveal(wrap, num);
+      else discard(wrap, num);
+    } else if (now - wrap.dataset.created > WIDGET_TIMEOUT) {
+      discard(wrap, num);
+    }
+  });
+}, 700);
+
+// Live poller
+setInterval(() => {
+  for (let i = maxFound + 1; i <= maxFound + SCAN_AHEAD; i++) {
+    addWidget(i);
+  }
+}, POLL_EVERY);
+</script>
+</body>
+</html>
